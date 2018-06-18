@@ -1,0 +1,475 @@
+------------------------------MainActivity-----------------------------
+
+package com.example.grzegorz.akceoria;
+
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Tworzenie menu
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Ta metoda pozwala na wybranie ktoregos elementu z naszego menu
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public void klik(View view){
+        Intent przejscie;
+        switch (view.getId())
+        {
+            case R.id.przycisk1:
+                przejscie = new Intent(MainActivity.this, OaplikacjiActivity.class);
+                startActivity(przejscie);
+                break;
+            case R.id.przycisk2:
+                przejscie = new Intent(MainActivity.this, NarzedziaActivity.class);
+                startActivity(przejscie);
+                break;
+
+        }
+
+
+    }
+}
+
+
+-----------------------OaplikacjiActivity------------------------------------------------
+
+
+package com.example.grzegorz.akceoria;
+
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+
+public class OaplikacjiActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_oaplikacji);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+}
+
+
+----------------------------NarzedziaActivity-----------------------------------------------
+
+package com.example.grzegorz.akceoria;
+
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+public class NarzedziaActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_narzedzia);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Tworzenie menu
+        getMenuInflater().inflate(R.menu.menu_narzedzia, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Ta metoda pozwala na wybranie ktoregos elementu z naszego menu
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+    public void klik(View view){
+        Intent przejscie;
+        switch (view.getId())
+        {
+            case R.id.fab:
+                przejscie = new Intent(NarzedziaActivity.this, NotatnikActivity.class);
+                startActivity(przejscie);
+                break;
+            case R.id.fab1:
+                przejscie = new Intent(NarzedziaActivity.this, KalkulatorActivity.class);
+                startActivity(przejscie);
+                break;
+
+        }
+
+
+    }
+}
+
+
+-------------------------------------NotatnikActivity---------------------------------------
+
+package com.example.grzegorz.akceoria;
+
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.jar.Manifest;
+
+public class NotatnikActivity extends AppCompatActivity {
+
+    EditText et;
+    String tekst = "";
+    private String path = Environment.getExternalStorageDirectory().toString() + "/Akcesoria/Notatnik";   //okreœlenie sciezki w ktorej mamy zapisac plik
+    private final int MEMORY_ACCESS = 5;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.d("aktywnoœæ", "onCreate");
+        setContentView(R.layout.activity_notatnik);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        et = (EditText) findViewById(R.id.edytortekstu);//
+        if (ActivityCompat.shouldShowRequestPermissionRationale(NotatnikActivity.this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {}
+        else
+        {
+            ActivityCompat.requestPermissions(NotatnikActivity.this, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},MEMORY_ACCESS);
+        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MEMORY_ACCESS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Jesli nie zostanie wyrazona zgoda na dostep do pamieci, nie bedzie mozliwosci zapisania pliku", Toast.LENGTH_LONG).show();
+                }
+
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Tworzenie menu
+        getMenuInflater().inflate(R.menu.menu_notatnik, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_zapisz) {
+            stworzfolder();
+            stworzplik();
+            // Ta metoda pozwala na wybranie ktoregos elementu z naszego menu
+            // Handle action bar item clicks here. The action bar will
+            // automatically handle clicks on the Home/Up button, so long
+            // as you specify a parent activity in AndroidManifest.xml.
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d("aktywnoœæ", "onStart");
+        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d("aktywnoœæ", "onSResume");
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d("aktywnoœæ", "onPause");
+        tekst = et.getText().toString();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        Log.d("aktywnoœæ", "onStop");
+        super.onStart();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.disconnect();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("aktywnoœæ", "onDestroy");
+        super.onDestroy();
+    }
+
+    public void stworzfolder() { //metoda tworzaca folder
+        File folder = new File(path);
+        if (!folder.exists()) {
+            try {
+                folder.mkdir();
+            }
+            catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void stworzplik() //tworzenie pliku
+    {
+        File plik = new File(path + "/" + System.currentTimeMillis() + ".txt"); //utworzony pli/ aktualny czs w seeekundach plus txt
+        FileOutputStream fOut;
+        OutputStreamWriter myOutWriter;
+        try {
+            fOut = new FileOutputStream(plik); //Zapisuje na to co zsota³o pobrane z pola EditText
+            myOutWriter = new OutputStreamWriter(fOut);
+            myOutWriter.append(et.getText());
+            myOutWriter.close();
+            fOut.close();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show(); //zamyka wszystkie elementy
+        }
+    }
+
+
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Notatnik Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+}
+
+
+-------------------------------------KalkulatorActivity------------------------------------------------
+
+package com.example.grzegorz.akceoria;
+
+
+import android.os.Build;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class KalkulatorActivity extends AppCompatActivity {
+
+    TextView wynik;
+    EditText liczba1, liczba2;
+    Button Dodawanie, Odejmowanie, Mno¿enie, Dzielenie;
+    float wyliczenie;
+    int l1, l2;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_kalkulator);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)
+        {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+
+        wynik = (TextView) findViewById(R.id.wynik);
+        liczba1 = (EditText) findViewById(R.id.liczba1);
+        liczba2 = (EditText) findViewById(R.id.liczba2);
+        Dodawanie = (Button) findViewById(R.id.Dodawanie);
+        Odejmowanie = (Button) findViewById(R.id.Odejmowanie);
+        Mno¿enie = (Button) findViewById(R.id.Mno¿enie);
+
+        Dodawanie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                l1 = Integer.parseInt(liczba1.getText().toString());
+                l2 = Integer.parseInt(liczba2.getText().toString());
+                wyliczenie = l1 + l2;
+                wynik.setText(String.valueOf(wyliczenie));
+            }
+        });
+
+        Odejmowanie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                l1 = Integer.parseInt(liczba1.getText().toString());
+                l2 = Integer.parseInt(liczba2.getText().toString());
+                wyliczenie = l1 - l2;
+                wynik.setText(String.valueOf(wyliczenie));
+            }
+        });
+
+        Mno¿enie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                l1 = Integer.parseInt(liczba1.getText().toString());
+                l2 = Integer.parseInt(liczba2.getText().toString());
+                wyliczenie = l1 * l2;
+                wynik.setText(String.valueOf(wyliczenie));
+            }
+        });
+
+        Mno¿enie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                l1 = Integer.parseInt(liczba1.getText().toString());
+                l2 = Integer.parseInt(liczba2.getText().toString());
+                wyliczenie = l1  l2;
+                wynik.setText(String.valueOf(wyliczenie));
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Tworzenie menu
+        getMenuInflater().inflate(R.menu.menu_narzedzia, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Ta metoda pozwala na wybranie ktoregos elementu z naszego menu
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+}
